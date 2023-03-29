@@ -1,4 +1,6 @@
-﻿namespace EF_Conversion_Default
+﻿using System.Collections.Generic;
+
+namespace EF_Conversion_Default
 {
     public class User
     {

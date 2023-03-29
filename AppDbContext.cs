@@ -1,5 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace EF_Conversion_Default
 {
@@ -13,15 +16,16 @@ namespace EF_Conversion_Default
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            IEnumerable<Location> def = new List<Location> { Location.Cluj };
             modelBuilder.Entity<User>().Property(p => p.Locations)
                .HasConversion(
                v => JoinOrDefault(v),
-               v => v.Split(";", StringSplitOptions.RemoveEmptyEntries).Select(val => Enum.Parse<Location>(val)).ToList(),
+               v => v.Split(";", StringSplitOptions.RemoveEmptyEntries).Select(val => Enum.Parse<Location>(val)),
                new ValueComparer<IEnumerable<Location>>(
                    (c1, c2) => Mycomp(c1, c2),
                    c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
                    c => c))
-               .HasDefaultValue(new List<Location> { Location.Cluj });
+               .HasDefaultValueSql(Location.Cluj.ToString());
         }
 
         static bool Mycomp(IEnumerable<Location>? a, IEnumerable<Location>? b)

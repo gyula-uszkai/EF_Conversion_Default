@@ -1,4 +1,7 @@
-﻿namespace EF_Conversion_Default
+﻿using System;
+using System.Collections.Generic;
+
+namespace EF_Conversion_Default
 {
     internal class Program
     {
